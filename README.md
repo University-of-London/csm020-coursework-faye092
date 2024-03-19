@@ -1,7 +1,7 @@
 <div class="rendered-markdown"><h1>Coursework Brief - MSc Computer Science</h1>
 <h2>Module: CSM020, Cloud Computing</h2>
 <h2>Coursework: January to April 2024 study session - End of Term Coursework Assessment</h2>
-<h3>Submission Deadline: Monday, 1 April 2024 by 13.00 Greenwich Mean Time</h3>
+<h3>Submission Deadline: Monday 1 April 2024 13.00 BST</h3>
 <ul>
 <li><strong>Please Note:</strong>You are permitted to upload your Coursework in the final submission area as many times as you like before the deadline. You will receive a similarity/originality score which represents what the Turnitin system identifies as work similar to another source. The originality score can take over 24 hours to generate, especially at busy times e.g. submission deadline.</li>
 <li>If you upload the wrong version of your Coursework, you are able to upload the correct version of your Coursework via the same submission area. You simply need to click on the 'submit paper' button again and submit your new version before the deadline.</li>
@@ -11,3 +11,9 @@
 </ul>
 <p><strong>Note</strong>: Coursework is weighted at 75% of final mark for the module.</p>
 <h3>Coursework Description</h3>
+<ul>
+The goal of the coursework is to make you apply the concepts, software development methods and frameworks seen in class to develop a Cloud Software as a Service API.
+<li>The coursework requires you to install, develop and test a Cloud SaaS.</li>
+<li>Upload your final scripts and a technical report to describe the functionality of your solution. Claim your Github classroom repository here: https://classroom.github.com/a/KmFOd0b1</li>
+<li>Follow the specifications and guidelines described in this document.</li>
+</ul>
