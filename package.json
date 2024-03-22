@@ -1,0 +1,31 @@
+{
+  "name": "csm020-coursework-faye092",
+  "version": "1.0.0",
+  "description": "MiniWall RESTFul API",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/University-of-London/csm020-coursework-faye092.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/University-of-London/csm020-coursework-faye092/issues"
+  },
+  "homepage": "https://github.com/University-of-London/csm020-coursework-faye092#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "chai": "^5.1.0",
+    "express": "^4.19.1",
+    "jsonwebtoken": "^9.0.2",
+    "mocha": "^10.3.0",
+    "mongoose": "^8.2.3",
+    "nodemon": "^3.1.0",
+    "passport": "^0.7.0",
+    "validator": "^13.11.0"
+  }
+}
