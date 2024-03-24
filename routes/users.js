@@ -2,7 +2,8 @@ const express = require('express');
 const { getUserController, updateUserController, 
     followUserController, unfollowUserController,
     blockUserController, unblockUserController,
-    getBlockedUsersController, deleteUserController } = require('../controllers/userController');
+    getBlockedUsersController, deleteUserController,
+    searchUserController } = require('../controllers/userController');
 const router = express.Router();
 
 //GET USER
@@ -28,5 +29,8 @@ router.get("/blocked/:userId", getBlockedUsersController);
 
 //DELETE USER
 router.delete("/delete/:userId", deleteUserController);
+
+//SEARCH USERS
+router.get("/search/:query", searchUserController);
 
 module.exports=router;
