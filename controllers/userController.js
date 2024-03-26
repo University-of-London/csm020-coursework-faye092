@@ -2,7 +2,6 @@ const { CustomError } = require("../middlewares/error");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
-const Story = require("../models/Story");
 
 const getUserController = async (req, res, next) => {
     const { userId } = req.params;
