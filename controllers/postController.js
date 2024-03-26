@@ -3,7 +3,7 @@ const User = require("../models/User");
 const { CustomError } = require("../middlewares/error");
 
 const createPostController = async (req, res, next) => {
-    const { userId, caption } = req.body;
+    const { userId, caption, description } = req.body;
     try{
         const user = await User.findById(userId);
         if(!user){
@@ -12,6 +12,7 @@ const createPostController = async (req, res, next) => {
         const newPost = new Post({
             user:userId,
             caption,
+            description,
         });
         await newPost.save();
         user.posts.push(newPost._id);
@@ -30,7 +31,7 @@ const generateFileUrl = (filename) => {
 
 const createPostWithImageController = async (req, res, next) => {
     const { userId } = req.params;
-    const {caption} = req.body;
+    const {caption,description} = req.body;
     const files = req.files;
 
     try{
@@ -42,6 +43,7 @@ const createPostWithImageController = async (req, res, next) => {
         const newPost = new Post({
             user: userId,
             caption,
+            description,
             image:imageUrls,
         });
         await newPost.save();
@@ -54,4 +56,76 @@ const createPostWithImageController = async (req, res, next) => {
     }
 };
 
-module.exports = { createPostController, createPostWithImageController };
+const updatePostController = async (req, res, next) => {
+    const { postId } = req.params;
+    const {caption,description} = req.body;
+    try{
+        const postToUpdate = await Post.findById(postId);
+        if(!postToUpdate){
+            throw new CustomError("Post not found!", 404);
+        }
+        postToUpdate.caption = caption || postToUpdate.caption;
+        postToUpdate.description = description || postToUpdate.description;
+        res.status(200).json({ message: "Post updated successfully!", post: postToUpdate });
+    }
+    catch(error){
+        next(error);
+    }
+};
+
+const getAllPostsController = async (req, res, next) => {
+    const { userId } = req.params;
+    try{
+        const user = await User.findById(userId).populate('posts');     
+        if(!user){
+            throw new CustomError("User not found!", 404);
+        }
+        const blockedUserIds = user.blockList.map(id=>id.toString());
+        const allPosts = await Post.find({ user: { $nin: blockedUserIds } }
+            ).populate("user","username fullname profilePicture");
+        res.status(200).json({ posts: allPosts });
+    }
+    catch(error){
+        next(error);
+    }
+};
+
+const getUserPostsController = async (req, res, next) => {
+    const { userId } = req.params;
+    try{
+        const user = await User.findById(userId).populate('posts');
+        if(!user){
+            throw new CustomError("User not found!", 404);
+        }
+        const userPosts = await Post.find({ user: userId });
+        res.status(200).json({ posts: userPosts });
+    }
+    catch(error){
+        next(error);
+    }
+};
+
+const deletePostController = async (req, res, next) => {
+    const { postId } = req.params;
+    try{
+        const postToDelete = await Post.findById(postId);
+        if(!postToDelete){
+            throw new CustomError("Post not found!", 404);
+        }
+        const user =  await User.findById(postToDelete.user);
+        if(!user){
+            throw new CustomError("User not found!", 404);
+        };
+        user.posts = user.posts.filter(postId=>postId.toString()!==postToDelete._id.toString());
+        await user.save();
+        await postToDelete.deleteOne();
+        res.status(200).json({ message: "Post deleted successfully!" });
+    }
+    catch(error){
+        next(error);
+    }
+};
+
+module.exports = { createPostController, createPostWithImageController,
+    updatePostController, getAllPostsController, 
+    getUserPostsController, deletePostController};
