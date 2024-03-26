@@ -14,10 +14,17 @@ const createCommentController = async (req, res, next) => {
         if(!user){
             throw new CustomError("User not found!", 404);
         }
+
+        // Check if the user is the owner of the post
+        if(post.user.toString()===userId){
+            throw new CustomError("You cannot comment on your own post!", 404);
+        }
+        //Proceed with creating the comment
         const newComment = new Comment({
             user: userId,
             post: postId,
             text,
+            timestamp: new Date(), //include timestamp for the comment
         });
         await newComment.save();
         post.comments.push(newComment._id);
