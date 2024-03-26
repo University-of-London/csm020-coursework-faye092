@@ -64,9 +64,12 @@ const updatePostController = async (req, res, next) => {
         if(!postToUpdate){
             throw new CustomError("Post not found!", 404);
         }
-        postToUpdate.caption = caption || postToUpdate.caption;
-        postToUpdate.description = description || postToUpdate.description;
-        res.status(200).json({ message: "Post updated successfully!", post: postToUpdate });
+        const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            { caption, description },
+            { new: true }
+        );
+        res.status(200).json({ message: "Post updated successfully!", post: updatedPost });
     }
     catch(error){
         next(error);
