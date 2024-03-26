@@ -117,5 +117,34 @@ const updateReplyCommentController=async(req,res,next)=>{
     }
 };
 
+const popuateUserDetails=async(comments)=>{
+    for(const comment of comments){ 
+        await comment.populate('user','username fullname profilePicture');
+        if(comment.replies.length>0){
+            await comment.populate('replies.user','username fullname profilePicture');
+        }
+    }
+};
+
+const getCommentsByPostController=async(req,res,next)=>{
+    const {postId}=req.params;
+    try{
+        const post = await Post.findById(postId);
+        if(!post){
+            throw new CustomError("Post not found!", 404);
+        }
+
+        let comments = await Comment.find({ post: postId });
+
+        await popuateUserDetails(comments);     
+
+        res.status(200).json({comments});
+    }
+    catch(error){
+        next(error);
+    }
+};
+
 module.exports = {createCommentController, createCommentReplyController,
-    updateCommentController, updateReplyCommentController};
+    updateCommentController, updateReplyCommentController,
+    getCommentsByPostController};
