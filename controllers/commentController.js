@@ -65,4 +65,57 @@ const createCommentReplyController = async (req, res, next) => {
     }
 };
 
-module.exports = {createCommentController, createCommentReplyController};
+const updateCommentController=async (req,res,next)=>{
+
+    const {commentId}=req.params;
+    const {text}=req.body;
+
+    try{
+        const commentToUpdate=await Comment.findById(commentId);
+        if(!commentToUpdate){
+            throw new CustomError("Comment not found!",404);
+        }
+
+        const updatedComment=await Comment.findByIdAndUpdate(commentId,
+            {text},{new:true});
+
+        res.status(200).json({message:"Comment updated successfully!",updatedComment});
+
+    }
+    catch(error){
+        next(error);
+    }
+};
+
+const updateReplyCommentController=async(req,res,next)=>{
+
+    const {commentId,replyId}=req.params;
+    const {text,userId}=req.body;
+    try{
+        const comment=await Comment.findById(commentId);
+        if(!comment){
+            throw new CustomError("Comment not found!",404);
+        }
+
+        const replyIndex=comment.replies.findIndex((reply)=>reply._id.toString()===replyId)
+        if(replyIndex===-1){
+            throw new CustomError("Reply not found!",404);
+        }
+
+        if(comment.replies[replyIndex].user.toString()!==userId){
+            throw new CustomError("You can only update your comments",404);
+        }
+
+        comment.replies[replyIndex].text=text;
+
+        await comment.save();
+        res.status(200).json({message:"Reply updated successfully!",comment});
+
+    }
+    catch(error){
+        next(error);
+    }
+};
+
+module.exports = {createCommentController, createCommentReplyController,
+    updateCommentController, updateReplyCommentController};
