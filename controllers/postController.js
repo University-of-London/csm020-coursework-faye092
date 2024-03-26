@@ -141,13 +141,23 @@ const likePostController = async (req, res, next) => {
         if(!user){
             throw new CustomError("User not found!", 404);
         }
+
+        //post owner cannot like their own post
+        if(post.user.toString()===userId){
+            throw new CustomError("You cannot like your own post!", 404);
+        }
         if(post.likes.includes(userId)){
             throw new CustomError("Post already liked!", 404);
         }
         post.likes.push(userId);
         await post.save();
-
-        res.status(200).json({ message: "Post liked successfully!" });
+        
+        // Custom sorting logic to sort posts based on likes and timestamps
+        const sortedPosts = await Post.find().sort({ 
+            likes: -1, // Sort by number of likes in descending order
+            timestamp: -1 // Sort by timestamp in descending order
+        });
+        res.status(200).json({ message: "Post liked successfully!", sortedPosts });
     }
     catch(error){
         next(error);
