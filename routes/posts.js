@@ -3,7 +3,8 @@ const router = express.Router();
 const upload=require("../middlewares/upload");
 const { createPostController,createPostWithImageController,
     updatePostController, getAllPostsController,
-    getUserPostsController, deletePostController } = require('../controllers/postController');
+    getUserPostsController, deletePostController,
+    likePostController} = require('../controllers/postController');
 
 //CREATE POST
 router.post("/create",createPostController);
@@ -22,5 +23,8 @@ router.get("/user/:userId",getUserPostsController);
 
 //DELETE POST
 router.delete("/delete/:postId",deletePostController);
+
+//LIKE POST
+router.post("/like/:postId",likePostController);
 
 module.exports = router;
