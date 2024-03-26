@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {createCommentController, createCommentReplyController,
     updateCommentController, updateReplyCommentController,
-    getCommentsByPostController, deleteCommentController} = require("../controllers/commentController");
+    getCommentsByPostController, deleteCommentController,
+    deleteReplyCommentController} = require("../controllers/commentController");
 
 //CREATE COMMENT
 router.post("/create",createCommentController);
@@ -21,5 +22,8 @@ router.get("/post/:postId",getCommentsByPostController);
 
 //DELETE A COMMENT
 router.delete("/delete/:commentId",deleteCommentController);
+
+//DELETE A REPLY COMMENT
+router.delete("/delete/:commentId/replies/:replyId",deleteReplyCommentController);
 
 module.exports = router;

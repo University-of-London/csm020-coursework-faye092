@@ -168,6 +168,27 @@ const deleteCommentController=async(req,res,next)=>{
     }  
 };
 
+const deleteReplyCommentController=async(req,res,next)=>{
+    const {commentId,replyId}=req.params
+    try{
+        const comment=await Comment.findById(commentId);
+        if(!comment){
+            throw new CustomError("Comment not found!",404);
+        }
+
+        comment.replies=comment.replies.filter(id=>id.toString()!==replyId);
+
+        await comment.save();
+
+        res.status(200).json({message:"Reply deleted successfully!"});
+
+    }
+    catch(error){
+        next(error);
+    }
+};
+
 module.exports = {createCommentController, createCommentReplyController,
     updateCommentController, updateReplyCommentController,
-    getCommentsByPostController, deleteCommentController};
+    getCommentsByPostController, deleteCommentController,
+    deleteReplyCommentController};
