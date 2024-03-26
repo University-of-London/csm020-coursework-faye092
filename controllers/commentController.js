@@ -145,6 +145,29 @@ const getCommentsByPostController=async(req,res,next)=>{
     }
 };
 
+const deleteCommentController=async(req,res,next)=>{
+    const {commentId}=req.params;
+    try{
+        const comment = await Comment.findById(commentId);
+        if(!comment){
+            throw new CustomError("Comment not found!", 404);
+        }
+
+        await Post.findOneAndUpdate(
+            {comments:commentId},
+            {$pull:{comments:commentId}},
+            {new:true}
+        );
+        
+        await comment.deleteOne();
+        res.status(200).json({message:"Comment deleted successfully!"});
+
+    }
+    catch(error){
+        next(error);
+    }  
+};
+
 module.exports = {createCommentController, createCommentReplyController,
     updateCommentController, updateReplyCommentController,
-    getCommentsByPostController};
+    getCommentsByPostController, deleteCommentController};

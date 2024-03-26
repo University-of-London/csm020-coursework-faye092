@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {createCommentController, createCommentReplyController,
     updateCommentController, updateReplyCommentController,
-    getCommentsByPostController} = require("../controllers/commentController");
+    getCommentsByPostController, deleteCommentController} = require("../controllers/commentController");
 
 //CREATE COMMENT
 router.post("/create",createCommentController);
@@ -18,5 +18,8 @@ router.put("/update/:commentId/replies/:replyId",updateReplyCommentController);
 
 //GET ALL POST COMMENTS
 router.get("/post/:postId",getCommentsByPostController);
+
+//DELETE A COMMENT
+router.delete("/delete/:commentId",deleteCommentController);
 
 module.exports = router;
