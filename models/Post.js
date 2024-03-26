@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    user: {
+        user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
@@ -26,6 +26,10 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment',
     }],
+    registrationTimestamp: {
+        type: Date,
+        default: Date.now,
+    },
 },{timestamps: true});
 
 const Post = mongoose.model('Post', postSchema);

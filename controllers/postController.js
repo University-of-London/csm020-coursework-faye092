@@ -13,6 +13,7 @@ const createPostController = async (req, res, next) => {
             user:userId,
             caption,
             description,
+            registrationTimestamp: new Date() // set registration timestamp
         });
         await newPost.save();
         user.posts.push(newPost._id);
@@ -45,6 +46,7 @@ const createPostWithImageController = async (req, res, next) => {
             caption,
             description,
             image:imageUrls,
+            registrationTimestamp: new Date() // set registration timestamp
         });
         await newPost.save();
         user.posts.push(newPost._id);
@@ -64,9 +66,15 @@ const updatePostController = async (req, res, next) => {
         if(!postToUpdate){
             throw new CustomError("Post not found!", 404);
         }
+        // Get the current timestamp
+        const currentTimestamp = new Date();
+
+        // Update the post with new values and the current timestamp
         const updatedPost = await Post.findByIdAndUpdate(
             postId,
-            { caption, description },
+            { caption,
+              description,
+              registrationTimestamp: currentTimestamp },
             { new: true }
         );
         res.status(200).json({ message: "Post updated successfully!", post: updatedPost });
