@@ -172,8 +172,53 @@ const likePostController = async (req, res, next) => {
     }
 };
 
+const reSortPosts = async () => {
+    try{
+        // Query all posts and sort them based on likes and timestamp
+        const sortedPosts = await Post.find().sort({ 
+            likes: -1, // Sort by number of likes in descending order
+            timestamp: -1 // Sort by timestamp in descending order
+        });
+        return sortedPosts;
+    
+    }
+    catch(error){
+        next(error);
+    }
+};
+
+const dislikePostController = async (req, res, next) => {
+    const { postId } = req.params;
+    const { userId } = req.body;
+
+    try{
+        const post = await Post.findById(postId);
+        if(!post){
+            throw new CustomError("Post not found!", 404);
+        }
+        const user = await User.findById(userId);
+        // Check if the user is the post owner
+        if(!user){
+            throw new CustomError("User not found!", 404);
+        }
+        // Check if the user has already liked the post
+        if(!post.likes.includes(userId)){
+            throw new CustomError("Post not liked!", 404);
+        }
+        // Remove the user ID from the likes array
+        post.likes = post.likes.filter(id=>id.toString()!==userId);
+        await post.save();
+        // Re-sort posts based on likes and timestamp
+        const sortedPosts = await reSortPosts();
+        // Return success message and updated list of sorted posts
+        res.status(200).json({ message: "Post disliked successfully!" });
+    }
+    catch(error){
+        next(error);
+    }
+};
 
 module.exports = { createPostController, createPostWithImageController,
     updatePostController, getAllPostsController, 
     getUserPostsController, deletePostController,
-    likePostController};
+    likePostController, dislikePostController};
