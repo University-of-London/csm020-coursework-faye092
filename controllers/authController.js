@@ -1,10 +1,19 @@
 const User=require("../models/User");
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
+const registerValidation=require("../validators/registerValidation");
+const loginValidation=require("../validators/loginValidation");
 const { CustomError } = require("../middlewares/error");
 
 const registerController=async (req,res,next)=>{
     try{
+       //validate user inputs
+       const {error}=registerValidation(req.body);
+        //if regsiter validation fails, return an error message
+       if(error){
+            throw new CustomError(error.details[0].message,400);
+       };
+
        const {password,username,email}=req.body
        const existingUser=await User.findOne({ $or: [{username},{email}] })
        if(existingUser){
@@ -25,6 +34,13 @@ const registerController=async (req,res,next)=>{
 
 const loginController=async (req,res,next)=>{
     try{
+        //validate user inputs
+        const {error}=loginValidation(req.body);
+        if(error){
+            //if login validation fails, return an error message
+            throw new CustomError(error.details[0].message,400);
+        }
+
         let user;
         if(req.body.email){
             user=await User.findOne({email:req.body.email});
