@@ -3,7 +3,7 @@ const User = require("../models/User");
 const { CustomError } = require("../middlewares/error");
 
 const createPostController = async (req, res, next) => {
-    const { userId, caption, description } = req.body;
+    const { userId, title, description } = req.body;
     try{
         const user = await User.findById(userId);
         if(!user){
@@ -11,7 +11,7 @@ const createPostController = async (req, res, next) => {
         }
         const newPost = new Post({
             user:userId,
-            caption,
+            title,
             description,
         });
         await newPost.save();
@@ -31,7 +31,7 @@ const generateFileUrl = (filename) => {
 
 const createPostWithImageController = async (req, res, next) => {
     const { userId } = req.params;
-    const {caption,description} = req.body;
+    const {title,description} = req.body;
     const files = req.files;
 
     try{
@@ -42,7 +42,7 @@ const createPostWithImageController = async (req, res, next) => {
         const imageUrls = files.map(file=>generateFileUrl(file.filename));
         const newPost = new Post({
             user: userId,
-            caption,
+            title,
             description,
             image:imageUrls,
         });
@@ -58,7 +58,7 @@ const createPostWithImageController = async (req, res, next) => {
 
 const updatePostController = async (req, res, next) => {
     const { postId } = req.params;
-    const {caption,description} = req.body;
+    const {title,description} = req.body;
     try{
         const postToUpdate = await Post.findById(postId);
         if(!postToUpdate){
@@ -67,7 +67,7 @@ const updatePostController = async (req, res, next) => {
 
         const updatedPost = await Post.findByIdAndUpdate(
             postId,
-            { caption,
+            { title,
               description },
             { new: true }
         );
