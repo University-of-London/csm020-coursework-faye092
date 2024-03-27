@@ -5,6 +5,16 @@ const { CustomError } = require("../middlewares/error");
 const createPostController = async (req, res, next) => {
     const { userId, title, description } = req.body;
     try{
+        // Validate title and description inputs
+        if (!title || !description) {
+            throw new CustomError("Title and description are required!", 400);
+        }
+        if (title.length < 5 || title.length > 100) { 
+            throw new CustomError("Title must be between 5 and 100 characters!", 400);
+        }
+        if (description.length < 10 || description.length > 1000) { 
+            throw new CustomError("Description must be between 10 and 1000 characters!", 400);
+        }
         const user = await User.findById(userId);
         if(!user){
             throw new CustomError("User not found!", 404);
@@ -39,6 +49,16 @@ const createPostWithImageController = async (req, res, next) => {
         if(!user){
             throw new CustomError("User not found!", 404);
         }
+        if (!title || !description) {
+            throw new CustomError("Title and description are required!", 400);
+        }
+        if (title.length < 5 || title.length > 100) { 
+            throw new CustomError("Title must be between 5 and 100 characters!", 400);
+        }
+        if (description.length < 10 || description.length > 1000) { 
+            throw new CustomError("Description must be between 10 and 1000 characters!", 400);
+        }
+
         const imageUrls = files.map(file=>generateFileUrl(file.filename));
         const newPost = new Post({
             user: userId,
@@ -65,6 +85,16 @@ const updatePostController = async (req, res, next) => {
             throw new CustomError("Post not found!", 404);
         }
 
+        if (!title || !description) {
+            throw new CustomError("Title and description are required!", 400);
+        }
+        if (title.length < 5 || title.length > 100) { 
+            throw new CustomError("Title must be between 5 and 100 characters!", 400);
+        }
+        if (description.length < 10 || description.length > 1000) { 
+            throw new CustomError("Description must be between 10 and 1000 characters!", 400);
+        }
+        
         const updatedPost = await Post.findByIdAndUpdate(
             postId,
             { title,
