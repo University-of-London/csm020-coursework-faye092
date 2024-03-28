@@ -26,10 +26,6 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment',
     }],
-    registrationTimestamp: {
-        type: Date,
-        default: Date.now,
-    },
 },{timestamps: true});
 
 const Post = mongoose.model('Post', postSchema);
