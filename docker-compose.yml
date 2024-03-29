@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  #MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=administrator
+      - MONGO_INITDB_ROOT_PASSWORD=administrator
+      - MONGO_INITDB_DATABASE=database
+
+app:
+    container_name: miniwall
+    restart: always
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL="mongodb+srv://admin:FVvzCFwtt48MAB95@cluster1.txognpq.mongodb.net/miniwall?retryWrites=true&w=majority&appName=Cluster1"
+      - PORT=5000
+      - JWT_SECRET="fullstacksnehasish"
+      - JWT_EXPIRES_IN="5d"
+      - URL="http://localhost:5000"
+      
