@@ -107,6 +107,20 @@ const updatePostController = async (req, res, next) => {
         next(error);
     }
 };
+const reSortPosts = async () => {
+    try{
+        // Query all posts and sort them based on likes and timestamp
+        const sortedPosts = await Post.find().sort({ 
+            likes: -1, // Sort by number of likes in descending order
+            createdAt: -1 // Sort by timestamp in descending order
+        });
+        return sortedPosts;
+    
+    }
+    catch(error){
+        next(error);
+    }
+};
 
 const getAllPostsController = async (req, res, next) => {
     const { userId } = req.params;
@@ -116,8 +130,12 @@ const getAllPostsController = async (req, res, next) => {
             throw new CustomError("User not found!", 404);
         }
         const blockedUserIds = user.blockList.map(id=>id.toString());
+        //fetch and sort all posts based on likes and timestamp
         const allPosts = await Post.find({ user: { $nin: blockedUserIds } }
-            ).populate("user","username fullname profilePicture");
+            ).sort({ 
+                likes: -1, // Sort by number of likes in descending order
+                createdAt: -1 // Sort by timestamp in descending order
+            });
         res.status(200).json({ posts: allPosts });
     }
     catch(error){
@@ -187,24 +205,9 @@ const likePostController = async (req, res, next) => {
         // Custom sorting logic to sort posts based on likes and timestamps
         const sortedPosts = await Post.find().sort({ 
             likes: -1, // Sort by number of likes in descending order
-            timestamp: -1 // Sort by timestamp in descending order
+            createdAt: -1 // Sort by timestamp in descending order
         });
         res.status(200).json({ message: "Post liked successfully!", sortedPosts });
-    }
-    catch(error){
-        next(error);
-    }
-};
-
-const reSortPosts = async () => {
-    try{
-        // Query all posts and sort them based on likes and timestamp
-        const sortedPosts = await Post.find().sort({ 
-            likes: -1, // Sort by number of likes in descending order
-            timestamp: -1 // Sort by timestamp in descending order
-        });
-        return sortedPosts;
-    
     }
     catch(error){
         next(error);

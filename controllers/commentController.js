@@ -134,7 +134,9 @@ const getCommentsByPostController=async(req,res,next)=>{
             throw new CustomError("Post not found!", 404);
         }
 
-        let comments = await Comment.find({ post: postId });
+        let comments = await Comment.find({ post: postId }).sort({ 
+            createdAt: -1 // Sort by timestamp in descending order
+        });
 
         await popuateUserDetails(comments);     
 

@@ -2,9 +2,9 @@ const jwt=require("jsonwebtoken")
 const {CustomError}=require("./error")
 
 const verifyToken=(req,res,next)=>{
-    const token=req.cookies.token;
+    const token=req.header("auth-token");
     if(!token){
-        throw new CustomError("Authorization token is missing!",401);
+        throw new CustomError("Access denied!",401);
     }
     jwt.verify(token,process.env.JWT_SECRET,async(err,data)=>{
         if(err){

@@ -60,9 +60,9 @@ const loginController=async (req,res,next)=>{
         }
 
         const {password,...data}=user._doc;
+        //generate an token
         const token=jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRE});
-        res.cookie("token",token).status(200).json(data);
-
+        res.header("auth-token",token).status(200).json({...data,"auth-token":token});
     }
     catch(error){
         next(error);
@@ -71,7 +71,7 @@ const loginController=async (req,res,next)=>{
 
 const logoutController=async(req,res,next)=>{
     try{
-        res.clearCookie("token",{sameSite:"none",secure:true}).status(200).json("user logged out successfully!");
+        res.clearHeader("token",{sameSite:"none",secure:true}).status(200).json("user logged out successfully!");
 
     }
     catch(error){
@@ -80,7 +80,7 @@ const logoutController=async(req,res,next)=>{
 }
 
 const refetchUserController=async(req,res,next)=>{
-    const token=req.cookies.token;
+    const token=req.header.token;
     jwt.verify(token,process.env.JWT_SECRET,{},async(err,data)=>{
         if(err){
             throw new CustomError(err,404);

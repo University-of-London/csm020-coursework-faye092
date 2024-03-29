@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 6, //minimum length of password is 6
+        maxlength: 1024, //maximum length of password is 1024
     },
     fullname: {
         type: String,

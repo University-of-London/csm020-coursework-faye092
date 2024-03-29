@@ -5,32 +5,33 @@ const { getUserController, updateUserController,
     getBlockedUsersController, deleteUserController,
     searchUserController, uploadProfilePictureController,
     uploadCoverPictureController } = require('../controllers/userController');
-const upload=require("../middlewares/upload")
+const upload=require("../middlewares/upload");
+const verifyToken = require('../middlewares/verifyToken');
 const router = express.Router();
 
 //GET USER
-router.get("/:userId", getUserController);
+router.get("/:userId",verifyToken, getUserController);
 
 //UPDATE USER
-router.put("/update/:userId", updateUserController);
+router.put("/update/:userId",verifyToken, updateUserController);
 
 //FOLLOW USER
-router.post("/follow/:userId", followUserController);
+router.post("/follow/:userId",verifyToken, followUserController);
 
 //UNFOLLOW USER
-router.post("/unfollow/:userId", unfollowUserController);
+router.post("/unfollow/:userId",verifyToken, unfollowUserController);
 
 //BLOCK USER
-router.post("/block/:userId", blockUserController);
+router.post("/block/:userId",verifyToken, blockUserController);
 
 //UNBLOCK USER
-router.post("/unblock/:userId", unblockUserController);
+router.post("/unblock/:userId",verifyToken, unblockUserController);
 
 //GET BLOCKED USERS
-router.get("/blocked/:userId", getBlockedUsersController);
+router.get("/blocked/:userId",verifyToken, getBlockedUsersController);
 
 //DELETE USER
-router.delete("/delete/:userId", deleteUserController);
+router.delete("/delete/:userId",verifyToken, deleteUserController);
 
 //SEARCH USERS
 router.get("/search/:query", searchUserController);
