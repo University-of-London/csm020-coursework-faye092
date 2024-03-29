@@ -13,7 +13,6 @@ const registerController=async (req,res,next)=>{
        if(error){
             throw new CustomError(error.details[0].message,400);
        };
-
        const {password,username,email}=req.body
        const existingUser=await User.findOne({ $or: [{username},{email}] })
        if(existingUser){
@@ -24,8 +23,7 @@ const registerController=async (req,res,next)=>{
        const hashedPassword=await bcrypt.hashSync(password,salt);
        const newUser=new User({...req.body,password:hashedPassword});
        const savedUser=await newUser.save();
-       res.status(201).json(savedUser);
-       
+       res.status(201).json(savedUser);       
     }
     catch(error){
         next(error);
@@ -40,7 +38,6 @@ const loginController=async (req,res,next)=>{
             //if login validation fails, return an error message
             throw new CustomError(error.details[0].message,400);
         }
-
         let user;
         if(req.body.email){
             user=await User.findOne({email:req.body.email});
@@ -48,17 +45,13 @@ const loginController=async (req,res,next)=>{
         else{
             user=await User.findOne({username:req.body.username});
         }
-
         if(!user){
             throw new CustomError("User not found!",404);
         }
-
         const match=await bcrypt.compare(req.body.password,user.password);
-
         if(!match){
             throw new CustomError("Wrong Credentials!",401);
         }
-
         const {password,...data}=user._doc;
         //generate an token
         const token=jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRE});
