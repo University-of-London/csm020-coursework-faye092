@@ -27,3 +27,5 @@ router.delete("/delete/:commentId",deleteCommentController);
 router.delete("/delete/:commentId/replies/:replyId",deleteReplyCommentController);
 
 module.exports = router;
+
+// Path: controllers/commentController.js

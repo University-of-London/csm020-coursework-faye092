@@ -32,3 +32,5 @@ router.post("/like/:postId",likePostController);
 router.post("/dislike/:postId",dislikePostController);
 
 module.exports = router;
+
+// Path: routes/users.js
