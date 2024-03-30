@@ -1,0 +1,10 @@
+{
+    "env": {
+      "MONGO_URL": "mongodb+srv://admin:FVvzCFwtt48MAB95@cluster1.txognpq.mongodb.net/miniwall?retryWrites=true&w=majority&appName=Cluster1",
+      "PORT": 5000,
+      "JWT_SECRET": "fullstacksnehasish",
+      "JWT_EXPIRE": "5d",
+      "URL": "http://localhost:5000"
+    }
+  }
+  
