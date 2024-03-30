@@ -37,3 +37,4 @@ volumes:
       type: none
       o: bind
       device: /path/on/host/mongodb_data
+
