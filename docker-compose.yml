@@ -32,9 +32,4 @@ services:
 
 volumes:
   mongodb_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /path/on/host/mongodb_data
 
